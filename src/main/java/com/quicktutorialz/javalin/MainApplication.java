@@ -1,11 +1,18 @@
 package com.quicktutorialz.javalin;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quicktutorialz.javalin.domain.AuthRequest;
+import com.quicktutorialz.javalin.domain.auth.AuthRequest;
 import com.quicktutorialz.javalin.domain.Service;
+import com.quicktutorialz.javalin.domain.auth.AuthResponse;
 import io.javalin.Context;
 import io.javalin.Javalin;
 import okhttp3.*;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +35,14 @@ public class MainApplication {
         serviceMapping.put("javalin-api", "http://localhost:7000");
         serviceMapping.put("another-service", "http://service.host.address");
     }
+
+    private static StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+    static {
+        encryptor.setPassword(getEnv("ENCRYPTION_PASSPHRASE"));
+        encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
+    }
+    private static ObjectMapper mapper = new ObjectMapper();
+
 
     /*
         REGISTER NEW SERVICE
@@ -65,34 +82,30 @@ public class MainApplication {
              */
 
             ctx.result(CompletableFuture.supplyAsync(()->{
-                        String clientSecret    = System.getenv("OAUTH2_CLIENT_SECRET");
-                        String accessTokenUrl  = System.getenv("OAUTH2_ACCESS_TOKEN_URL");
+                        String clientSecret    = getEnv("OAUTH2_CLIENT_SECRET");
+                        String accessTokenUrl  = getEnv("OAUTH2_ACCESS_TOKEN_URL");
 
                         AuthRequest authRequest = ctx.validatedBodyAsClass(AuthRequest.class).getOrThrow();
                         String authUrl = getAccessTokenUrl(clientSecret, accessTokenUrl, authRequest);
 
-
-                        ObjectMapper mapper = new ObjectMapper();
                         try {
                             /*
                                 {"access_token":"95d1aa92a0f11e40115e7630ee3a4f32c3da8afb","token_type":"bearer","scope":"user"}
                            */
                             Map<String, String> authMap = mapper.readValue(post(authUrl, ctx.headerMap(), "application/json", null), Map.class);
-
-                            String userUrl = System.getenv("OAUTH2_PROVIDER_URL").concat("/").concat(authMap.get("scope"));
+                            String accessToken = authMap.get("access_token");
+                            String userUrl = getEnv("OAUTH2_PROVIDER_URL").concat("/").concat(authMap.get("scope"));
                             Map<String, String> userHeaders = new HashMap<>();
-                            userHeaders.put("Authorization: ", "token ".concat(authMap.get("access_token")));
+                            userHeaders.put("Authorization: ", "token ".concat(accessToken));
                             //curl -X GET -H 'Authorization: token 95d1aa92a0f11e40115e7630ee3a4f32c3da8afb' https://api.github.com/user
-                            //id
-                            //name
                             Map<String, Object> userMap = mapper.readValue(get(userUrl, userHeaders, "application/json"), Map.class);
                             String id = (String) userMap.get("id");
                             String name = (String) userMap.get("name");
-                            //id, name, access_token criptati insieme, messi in un JWT e rispediti al frontend
+                            String jwt = generateJwt( encrypt(id, name, accessToken) );
 
-                            ctx.header("jwt", "jwtprodotto");
+                            ctx.header("jwt", jwt);
                             //TODO verificare che l'header jwt sia presente in output.
-                            return new ByteArrayInputStream("Authentication succeeded!".getBytes());
+                            return new ByteArrayInputStream(mapper.writeValueAsString(new AuthResponse(id, name, jwt)).getBytes());
                         } catch (IOException e) {
                             return new ByteArrayInputStream(e.getMessage().getBytes());
                         }
@@ -140,6 +153,44 @@ public class MainApplication {
         //after Responding to a Path
         app.after("/you/*", ctx->{log.info(ctx.url());});
 
+    }
+
+    private static String encrypt(String id, String name, String accessToken) {
+        return encryptor.encrypt( id.concat(":").concat(name).concat(":").concat(accessToken) );
+    }
+
+    private static AuthResponse decrypt(String encryptedPayload) {
+        String[] payload = encryptor.decrypt(encryptedPayload).split(":");
+        return new AuthResponse(payload[0], payload[1], payload[2]);
+    }
+
+    private static String generateJwt(String encryptedPayload) {
+        Algorithm algorithm = Algorithm.HMAC256( getEnv("JWT_SECRET_KEY") );
+        return JWT.create()
+                    .withIssuer("Javalin-Gateway")
+                    .withClaim("data", encryptedPayload)
+                    .withExpiresAt(getExpirationDate())
+                    .sign(algorithm);
+    }
+
+    private static Date getExpirationDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        return calendar.getTime();
+    }
+
+    private static String verifyJwt(String jwt) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256( getEnv("JWT_SECRET_KEY") );
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("Javalin-Gateway")
+                    .build(); //Reusable verifier instance
+            DecodedJWT decoded = verifier.verify(jwt);
+            return decoded.getPayload();
+        } catch (JWTVerificationException exception){
+            return null;
+        }
     }
 
     @NotNull
@@ -210,6 +261,13 @@ public class MainApplication {
                           .headers(Headers.of(headers))
                           .get()
                           .build();
+    }
+
+    private static String getEnv(String envName) {
+        String envValue = System.getenv(envName);
+        if(envValue==null)
+            envValue = "default";
+        return envValue;
     }
 
 

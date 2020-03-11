@@ -1,4 +1,4 @@
-package com.quicktutorialz.javalin.domain;
+package com.quicktutorialz.javalin.domain.auth;
 
 import java.io.Serializable;
 
