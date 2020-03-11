@@ -1,6 +1,8 @@
 package com.quicktutorialz.javalin.domain;
 
-public class Service {
+import java.io.Serializable;
+
+public class Service implements Serializable {
     String code;
     String hostUrl;
 

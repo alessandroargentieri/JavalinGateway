@@ -1,5 +1,7 @@
 package com.quicktutorialz.javalin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quicktutorialz.javalin.domain.AuthRequest;
 import com.quicktutorialz.javalin.domain.Service;
 import io.javalin.Context;
 import io.javalin.Javalin;
@@ -57,6 +59,52 @@ public class MainApplication {
         });
 
 
+        app.post("/login", ctx-> {
+            /*
+            curl -X POST -H 'Accept: application/json' 'https://github.com/login/oauth/access_token?client_id=<clientId>&client_secret=<clientSecret>&code=<temporaryCode>&redirect_uri=<fullRegisteredFrontendCallBackUrlForFirstStep>&state=fknrrdyjikfn'
+             */
+
+            ctx.result(CompletableFuture.supplyAsync(()->{
+                        String clientSecret    = System.getenv("OAUTH2_CLIENT_SECRET");
+                        String accessTokenUrl  = System.getenv("OAUTH2_ACCESS_TOKEN_URL");
+
+                        AuthRequest authRequest = ctx.validatedBodyAsClass(AuthRequest.class).getOrThrow();
+                        String authUrl = getAccessTokenUrl(clientSecret, accessTokenUrl, authRequest);
+
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            /*
+                                {"access_token":"95d1aa92a0f11e40115e7630ee3a4f32c3da8afb","token_type":"bearer","scope":"user"}
+                           */
+                            Map<String, String> authMap = mapper.readValue(post(authUrl, ctx.headerMap(), "application/json", null), Map.class);
+
+                            String userUrl = System.getenv("OAUTH2_PROVIDER_URL").concat("/").concat(authMap.get("scope"));
+                            Map<String, String> userHeaders = new HashMap<>();
+                            userHeaders.put("Authorization: ", "token ".concat(authMap.get("access_token")));
+                            //curl -X GET -H 'Authorization: token 95d1aa92a0f11e40115e7630ee3a4f32c3da8afb' https://api.github.com/user
+                            //id
+                            //name
+                            Map<String, Object> userMap = mapper.readValue(get(userUrl, userHeaders, "application/json"), Map.class);
+                            String id = (String) userMap.get("id");
+                            String name = (String) userMap.get("name");
+                            //id, name, access_token criptati insieme, messi in un JWT e rispediti al frontend
+
+                            ctx.header("jwt", "jwtprodotto");
+                            //TODO verificare che l'header jwt sia presente in output.
+                            return new ByteArrayInputStream("Authentication succeeded!".getBytes());
+                        } catch (IOException e) {
+                            return new ByteArrayInputStream(e.getMessage().getBytes());
+                        }
+
+                    })
+            );
+
+
+
+        });
+
+
         /* ~~~~~~~~~~~~~~~~~~~~~~~~~proxy http methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
         app.get("/*", ctx->ctx.result("Hello world!"));
@@ -94,6 +142,21 @@ public class MainApplication {
 
     }
 
+    @NotNull
+    private static String getAccessTokenUrl(String clientSecret, String accessTokenUrl, AuthRequest authRequest) {
+        return accessTokenUrl
+                .concat("?client_id=")
+                .concat(authRequest.getClientId())
+                .concat("&client_secret=")
+                .concat(clientSecret)
+                .concat("&code=")
+                .concat(authRequest.getCode())
+                .concat("&redirect_uri=")
+                .concat(authRequest.getRedirectUri())
+                .concat("&state=")
+                .concat(authRequest.getState());
+    }
+
 
 
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~utility methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -122,10 +185,35 @@ public class MainApplication {
     @NotNull
     private static Request composePostRequest(String url, Map<String, String> headers, String mediaType, byte[] content) {
         return new Request.Builder()
-                    .url(url)
-                    .headers(Headers.of(headers))
-                    .post(RequestBody.create(MediaType.parse(mediaType), content))
-                    .build();
+                          .url(url)
+                          .headers(Headers.of(headers))
+                          .post(RequestBody.create(MediaType.parse(mediaType), content))
+                          .build();
     }
+
+
+    public static InputStream get(String url, Map<String, String> headers, String mediaType) {
+        OkHttpClient client = new OkHttpClient();
+        headers.put("Content-Type:", mediaType);
+        try {
+            Response response = client.newCall(composeGetRequest(url, headers)).execute();
+            return response.body().byteStream();
+        } catch (IOException e) {
+            return new ByteArrayInputStream(e.getMessage().getBytes());
+        }
+    }
+
+    @NotNull
+    private static Request composeGetRequest(String url, Map<String, String> headers) {
+        return new Request.Builder()
+                          .url(url)
+                          .headers(Headers.of(headers))
+                          .get()
+                          .build();
+    }
+
+
+
+
 
 }
