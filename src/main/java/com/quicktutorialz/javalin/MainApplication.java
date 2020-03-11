@@ -17,14 +17,13 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class MainApplication {
 
@@ -82,8 +81,13 @@ public class MainApplication {
              */
 
             ctx.result(CompletableFuture.supplyAsync(()->{
+                /*
+                curl -X POST -H 'Accept: application/json' 'https://github.com/login/oauth/access_token?client_id=6b75ee8f443a8ebbb38c&client_secret=6dad129bc14cca40ec61949a9ed20a0bbbff3136&code=0f630920b95aee183c29&redirect_uri=http://localhost:8080/login/oauth2/code/github&state=fknrrdyjikfn'
+                 */
                         String clientSecret    = getEnv("OAUTH2_CLIENT_SECRET");
                         String accessTokenUrl  = getEnv("OAUTH2_ACCESS_TOKEN_URL");
+                        String apiProviderUrl =  getEnv("OAUTH2_PROVIDER_URL");
+
 
                         AuthRequest authRequest = ctx.validatedBodyAsClass(AuthRequest.class).getOrThrow();
                         String authUrl = getAccessTokenUrl(clientSecret, accessTokenUrl, authRequest);
@@ -92,14 +96,19 @@ public class MainApplication {
                             /*
                                 {"access_token":"95d1aa92a0f11e40115e7630ee3a4f32c3da8afb","token_type":"bearer","scope":"user"}
                            */
-                            Map<String, String> authMap = mapper.readValue(post(authUrl, ctx.headerMap(), "application/json", null), Map.class);
-                            String accessToken = authMap.get("access_token");
-                            String userUrl = getEnv("OAUTH2_PROVIDER_URL").concat("/").concat(authMap.get("scope"));
+                            InputStream stream = post(authUrl, ctx.headerMap(), "application/json", null);
+                            String[] resultSet = new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.joining("\n"))
+                                    .split("&");
+
+                            String accessToken = resultSet[0].replace("access_token=","");
+                            String scope = resultSet[1].replace("scope=","");
+                            String userUrl = apiProviderUrl.concat("/").concat(scope);
                             Map<String, String> userHeaders = new HashMap<>();
-                            userHeaders.put("Authorization: ", "token ".concat(accessToken));
+                            userHeaders.put("Authorization", "token ".concat(accessToken));
                             //curl -X GET -H 'Authorization: token 95d1aa92a0f11e40115e7630ee3a4f32c3da8afb' https://api.github.com/user
+
                             Map<String, Object> userMap = mapper.readValue(get(userUrl, userHeaders, "application/json"), Map.class);
-                            String id = (String) userMap.get("id");
+                            String id = String.valueOf((Integer) userMap.get("id"));
                             String name = (String) userMap.get("name");
                             String jwt = generateJwt( encrypt(id, name, accessToken) );
 
@@ -208,8 +217,6 @@ public class MainApplication {
                 .concat(authRequest.getState());
     }
 
-
-
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~utility methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     private static String getMediaType(Context ctx) {
@@ -235,6 +242,10 @@ public class MainApplication {
 
     @NotNull
     private static Request composePostRequest(String url, Map<String, String> headers, String mediaType, byte[] content) {
+        if (content==null){
+            RequestBody reqbody = RequestBody.create(null, new byte[0]);
+            return new Request.Builder().url(url).method("POST",reqbody).header("Content-Length", "0").build();
+        }
         return new Request.Builder()
                           .url(url)
                           .headers(Headers.of(headers))
@@ -245,7 +256,7 @@ public class MainApplication {
 
     public static InputStream get(String url, Map<String, String> headers, String mediaType) {
         OkHttpClient client = new OkHttpClient();
-        headers.put("Content-Type:", mediaType);
+        headers.put("Content-Type", mediaType);
         try {
             Response response = client.newCall(composeGetRequest(url, headers)).execute();
             return response.body().byteStream();

@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 public class AuthRequest implements Serializable {
 
-    private final String clientId;
-    private final String code;
-    private final String redirectUri;
-    private final String state;
+    private String clientId;
+    private String code;
+    private String redirectUri;
+    private String state;
+
+    public AuthRequest() {
+    }
 
     public AuthRequest(String clientId, String code, String redirectUri, String state) {
         this.clientId = clientId;
