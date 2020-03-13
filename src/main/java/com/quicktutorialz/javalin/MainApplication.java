@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quicktutorialz.javalin.domain.auth.AuthRequest;
-import com.quicktutorialz.javalin.domain.Service;
+import com.quicktutorialz.javalin.domain.service.Service;
 import com.quicktutorialz.javalin.domain.auth.AuthResponse;
 import io.javalin.Context;
 import io.javalin.Javalin;
@@ -84,83 +84,90 @@ public class MainApplication {
                 /*
                 curl -X POST -H 'Accept: application/json' 'https://github.com/login/oauth/access_token?client_id=6b75ee8f443a8ebbb38c&client_secret=6dad129bc14cca40ec61949a9ed20a0bbbff3136&code=0f630920b95aee183c29&redirect_uri=http://localhost:8080/login/oauth2/code/github&state=fknrrdyjikfn'
                  */
-                        String clientSecret    = getEnv("OAUTH2_CLIENT_SECRET");
-                        String accessTokenUrl  = getEnv("OAUTH2_ACCESS_TOKEN_URL");
-                        String apiProviderUrl =  getEnv("OAUTH2_PROVIDER_URL");
 
+                    String clientSecret    = getEnv("OAUTH2_CLIENT_SECRET");
+                    String accessTokenUrl  = getEnv("OAUTH2_ACCESS_TOKEN_URL");
+                    String apiProviderUrl =  getEnv("OAUTH2_PROVIDER_URL");
 
-                        AuthRequest authRequest = ctx.validatedBodyAsClass(AuthRequest.class).getOrThrow();
-                        String authUrl = getAccessTokenUrl(clientSecret, accessTokenUrl, authRequest);
+                    AuthRequest authRequest = ctx.validatedBodyAsClass(AuthRequest.class).getOrThrow();
+                    String authUrl = getAccessTokenUrl(clientSecret, accessTokenUrl, authRequest);
 
-                        try {
-                            /*
-                                {"access_token":"95d1aa92a0f11e40115e7630ee3a4f32c3da8afb","token_type":"bearer","scope":"user"}
-                           */
-                            InputStream stream = post(authUrl, ctx.headerMap(), "application/json", null);
-                            String[] resultSet = new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.joining("\n"))
-                                    .split("&");
+                    try {
+                        /*
+                            {"access_token":"95d1aa92a0f11e40115e7630ee3a4f32c3da8afb","token_type":"bearer","scope":"user"}
+                       */
+                        InputStream stream = post(authUrl, ctx.headerMap(), "application/json", null);
+                        String[] resultSet = new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.joining("\n"))
+                                .split("&");
 
-                            String accessToken = resultSet[0].replace("access_token=","");
-                            String scope = resultSet[1].replace("scope=","");
-                            String userUrl = apiProviderUrl.concat("/").concat(scope);
-                            Map<String, String> userHeaders = new HashMap<>();
-                            userHeaders.put("Authorization", "token ".concat(accessToken));
-                            //curl -X GET -H 'Authorization: token 95d1aa92a0f11e40115e7630ee3a4f32c3da8afb' https://api.github.com/user
+                        String accessToken = resultSet[0].replace("access_token=","");
+                        String scope = resultSet[1].replace("scope=","");
+                        String userUrl = apiProviderUrl.concat("/").concat(scope);
+                        Map<String, String> userHeaders = new HashMap<>();
+                        userHeaders.put("Authorization", "token ".concat(accessToken));
+                        //curl -X GET -H 'Authorization: token 95d1aa92a0f11e40115e7630ee3a4f32c3da8afb' https://api.github.com/user
 
-                            Map<String, Object> userMap = mapper.readValue(get(userUrl, userHeaders, "application/json"), Map.class);
-                            String id = String.valueOf((Integer) userMap.get("id"));
-                            String name = (String) userMap.get("name");
-                            String jwt = generateJwt( encrypt(id, name, accessToken) );
+                        Map<String, Object> userMap = mapper.readValue(get(userUrl, userHeaders, "application/json"), Map.class);
+                        String id = String.valueOf((Integer) userMap.get("id"));
+                        String name = (String) userMap.get("name");
+                        String jwt = generateJwt( encrypt(id, name, accessToken) );
 
-                            ctx.header("jwt", jwt);
-                            //TODO verificare che l'header jwt sia presente in output.
-                            return new ByteArrayInputStream(mapper.writeValueAsString(new AuthResponse(id, name, jwt)).getBytes());
-                        } catch (IOException e) {
-                            return new ByteArrayInputStream(e.getMessage().getBytes());
-                        }
+                        ctx.header("jwt", jwt);
+                        return new ByteArrayInputStream(mapper.writeValueAsString(new AuthResponse(id, name, jwt)).getBytes());
+                    } catch (IOException e) {
+                        return new ByteArrayInputStream(e.getMessage().getBytes());
+                    }
 
-                    })
+                })
             );
-
-
-
         });
 
 
         /* ~~~~~~~~~~~~~~~~~~~~~~~~~proxy http methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        app.get("/*", ctx->ctx.result("Hello world!"));
+        app.get("/*", ctx-> {
+            ctx.result(CompletableFuture.supplyAsync(() -> get(getServiceUrl(ctx), ctx.headerMap(), getMediaType(ctx)) ));
+        });
 
         app.post("/*", ctx-> {
             ctx.result(CompletableFuture.supplyAsync(() -> post(getServiceUrl(ctx), ctx.headerMap(), getMediaType(ctx), ctx.bodyAsBytes()) ));
         });
 
 
-        app.put("/*", ctx->ctx.result("Hello world!"));
+        app.put("/*", ctx-> {
+            ctx.result(CompletableFuture.supplyAsync(() -> put(getServiceUrl(ctx), ctx.headerMap(), getMediaType(ctx), ctx.bodyAsBytes()) ));
+        });
 
-        app.delete("/*", ctx->ctx.result("Hello world!"));
+        app.delete("/*", ctx-> {
+            ctx.result(CompletableFuture.supplyAsync(() -> delete(getServiceUrl(ctx), ctx.headerMap()) ));
+        });
 
-        app.patch("/*", ctx->ctx.result("Hello world!"));
+        app.patch("/*", ctx-> {
+            ctx.result(CompletableFuture.supplyAsync(() -> patch(getServiceUrl(ctx), ctx.headerMap(), getMediaType(ctx), ctx.bodyAsBytes()) ));
+        });
 
-        app.options("/*", ctx->ctx.result("Hello world!"));
-
-        app.head("/*", ctx->ctx.result("Hello world!"));
-
-        app.trace("/*", ctx->ctx.result("Hello world!"));
-
-        app.connect("/*", ctx->ctx.result("Hello world!"));
-
+        app.head("/*", ctx-> {
+            ctx.result(CompletableFuture.supplyAsync(() -> head(getServiceUrl(ctx), ctx.headerMap())));
+        });
 
         /* ~~~~~~~~~~~~~~~~~~~~~~~~~ filtering methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-        //filtering all
-        app.before(ctx->{log.info(ctx.path());});
 
         //filtering a Path
-        app.before("/you/*", ctx->{log.info(ctx.ip());});
+        app.before("/login", ctx->{
+            log.info(ctx.ip());
+        });
+
+        //filtering all
+        app.before(ctx->{
+            log.info(ctx.path());
+            log.info(ctx.ip());
+        });
 
         //after Responding to a Path
-        app.after("/you/*", ctx->{log.info(ctx.url());});
+        app.after(ctx->{
+            log.info(ctx.url());
+        });
 
     }
 
@@ -194,7 +201,7 @@ public class MainApplication {
             Algorithm algorithm = Algorithm.HMAC256( getEnv("JWT_SECRET_KEY") );
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("Javalin-Gateway")
-                    .build(); //Reusable verifier instance
+                    .build();
             DecodedJWT decoded = verifier.verify(jwt);
             return decoded.getPayload();
         } catch (JWTVerificationException exception){
@@ -230,14 +237,9 @@ public class MainApplication {
         return serviceMapping.get(serviceName).concat(splittedUrl[1]).concat(queryString);
     }
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~ POST
     public static InputStream post(String url, Map<String, String> headers, String mediaType, byte[] content) {
-        OkHttpClient client = new OkHttpClient();
-        try {
-            Response response = client.newCall(composePostRequest(url, headers, mediaType, content)).execute();
-            return response.body().byteStream();
-        } catch (IOException e) {
-            return new ByteArrayInputStream(e.getMessage().getBytes());
-        }
+        return performRequest(url, headers, composePostRequest(url, headers, mediaType, content));
     }
 
     @NotNull
@@ -253,16 +255,11 @@ public class MainApplication {
                           .build();
     }
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~GET
 
     public static InputStream get(String url, Map<String, String> headers, String mediaType) {
-        OkHttpClient client = new OkHttpClient();
         headers.put("Content-Type", mediaType);
-        try {
-            Response response = client.newCall(composeGetRequest(url, headers)).execute();
-            return response.body().byteStream();
-        } catch (IOException e) {
-            return new ByteArrayInputStream(e.getMessage().getBytes());
-        }
+        return performRequest(url, headers, composeGetRequest(url, headers));
     }
 
     @NotNull
@@ -274,11 +271,119 @@ public class MainApplication {
                           .build();
     }
 
+    //~~~~~~~~~~~~~~~~~~~~PUT
+    public static InputStream put(String url, Map<String, String> headers, String mediaType, byte[] content) {
+        return performRequest(url, headers, composePutRequest(url, headers, mediaType, content));
+    }
+
+    @NotNull
+    private static Request composePutRequest(String url, Map<String, String> headers, String mediaType, byte[] content) {
+        if (content==null){
+            RequestBody reqbody = RequestBody.create(null, new byte[0]);
+            return new Request.Builder().url(url).method("POST",reqbody).header("Content-Length", "0").build();
+        }
+        return new Request.Builder()
+                .url(url)
+                .headers(Headers.of(headers))
+                .put(RequestBody.create(MediaType.parse(mediaType), content))
+                .build();
+    }
+    //~~~~~~~~~~~~~~~~~~~~DELETE
+    public static InputStream delete(String url, Map<String, String> headers) {
+        return performRequest(url, headers, composeDeleteRequest(url, headers));
+    }
+
+    @NotNull
+    private static Request composeDeleteRequest(String url, Map<String, String> headers) {
+        return new Request.Builder()
+                .url(url)
+                .headers(Headers.of(headers))
+                .delete()
+                .build();
+    }
+
+    //~~~~~~~~~~~~~~~~~~~~PATCH
+    public static InputStream patch(String url, Map<String, String> headers, String mediaType, byte[] content) {
+        return performRequest(url, headers, composePatchRequest(url, headers, mediaType, content));
+    }
+
+    @NotNull
+    private static Request composePatchRequest(String url, Map<String, String> headers, String mediaType, byte[] content) {
+        if (content==null){
+            RequestBody reqbody = RequestBody.create(null, new byte[0]);
+            return new Request.Builder().url(url).method("POST",reqbody).header("Content-Length", "0").build();
+        }
+        return new Request.Builder()
+                .url(url)
+                .headers(Headers.of(headers))
+                .patch(RequestBody.create(MediaType.parse(mediaType), content))
+                .build();
+    }
+
+    //~~~~~~~~~~~~~~~~~~~~HEAD
+    public static InputStream head(String url, Map<String, String> headers) {
+        return performRequest(url, headers, composeHeadRequest(url, headers));
+    }
+
+    @NotNull
+    private static Request composeHeadRequest(String url, Map<String, String> headers) {
+        return new Request.Builder()
+                .url(url)
+                .headers(Headers.of(headers))
+                .head()
+                .build();
+    }
+
+
+
+    private static InputStream performRequest(String url, Map<String, String> headers, Request request) {
+        try {
+            checkAuth(url, headers);
+            OkHttpClient client = new OkHttpClient();
+            Response response = client.newCall(request).execute();
+            removeToken(headers);
+            return response.body().byteStream();
+        } catch (Exception e) {
+            return errorReturn(e, headers);
+        }
+    }
+
+
     private static String getEnv(String envName) {
         String envValue = System.getenv(envName);
         if(envValue==null)
             envValue = "default";
         return envValue;
+    }
+
+
+
+    private static void checkAuth(String url, Map<String, String> headers) {
+        if(url.contains("login") || url.contains("https://api.github.com")) return;
+        String authorization = headers.get("Authorization");
+        if(authorization == null) {
+            throw  new JWTVerificationException("Unauthorized");
+        }
+        String jwt = authorization.replace("Bearer ", "");
+        String decoded = verifyJwt(jwt);
+        if(decoded == null) {
+            throw  new JWTVerificationException("Session expired");
+        }
+        headers.put("token", decoded);
+    }
+
+    private static void removeToken(Map<String, String> headers) {
+        headers.remove("token");
+    }
+
+    private static InputStream errorReturn(Exception e, Map<String, String> headers) {
+        if(e instanceof JWTVerificationException) {
+            headers.put("Status", "HTTP/1.1 400 Unauthorized");
+        } else {
+            headers.put("Status", "HTTP/1.1 500 Internal Server Error");
+        }
+        removeToken(headers);
+        return new ByteArrayInputStream(e.getMessage().getBytes());
     }
 
 

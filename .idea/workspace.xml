@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb9d5af0-efcc-46c1-b8bf-fc1a02018594" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/jwt/JwtUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/auth/AuthRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/auth/AuthRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/service/Service.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/MainApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/MainApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/Service.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +80,9 @@
       <workItem from="1583760090456" duration="955000" />
       <workItem from="1583762277218" duration="5855000" />
       <workItem from="1583827339329" duration="8524000" />
-      <workItem from="1583913429389" duration="20090000" />
+      <workItem from="1583913429389" duration="20243000" />
+      <workItem from="1584035663361" duration="7649000" />
+      <workItem from="1584111538275" duration="7667000" />
     </task>
     <servers />
   </component>
@@ -90,58 +94,58 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="418" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583827907652" />
-    <state x="768" y="259" width="374" height="558" key="#com.intellij.ide.util.MemberChooser" timestamp="1583949312634">
+    <state x="768" y="259" width="374" height="558" key="#com.intellij.ide.util.MemberChooser" timestamp="1584092875916">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="768" y="259" width="374" height="558" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583949312634" />
-    <state x="718" y="192" width="809" height="695" key="#xdebugger.evaluate" timestamp="1583950266476">
+    <state x="768" y="259" width="374" height="558" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584092875916" />
+    <state x="718" y="192" width="809" height="695" key="#xdebugger.evaluate" timestamp="1584036383585">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="718" y="192" width="809" height="695" key="#xdebugger.evaluate/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583950266476" />
-    <state width="1874" height="283" key="GridCell.Tab.0.bottom" timestamp="1583954545522">
+    <state x="718" y="192" width="809" height="695" key="#xdebugger.evaluate/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584036383585" />
+    <state width="1671" height="237" key="GridCell.Tab.0.bottom" timestamp="1584123605858">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545522" />
-    <state width="1874" height="283" key="GridCell.Tab.0.center" timestamp="1583954545522">
+    <state width="1671" height="237" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605858" />
+    <state width="1671" height="237" key="GridCell.Tab.0.center" timestamp="1584123605857">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545522" />
-    <state width="1874" height="283" key="GridCell.Tab.0.left" timestamp="1583954545522">
+    <state width="1671" height="237" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605857" />
+    <state width="1671" height="237" key="GridCell.Tab.0.left" timestamp="1584123605857">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545522" />
-    <state width="1874" height="283" key="GridCell.Tab.0.right" timestamp="1583954545522">
+    <state width="1671" height="237" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605857" />
+    <state width="1671" height="237" key="GridCell.Tab.0.right" timestamp="1584123605857">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545522" />
-    <state width="1874" height="283" key="GridCell.Tab.1.bottom" timestamp="1583954545523">
+    <state width="1671" height="237" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605857" />
+    <state width="1671" height="237" key="GridCell.Tab.1.bottom" timestamp="1584123675266">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.1.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545523" />
-    <state width="1874" height="283" key="GridCell.Tab.1.center" timestamp="1583954545522">
+    <state width="1671" height="237" key="GridCell.Tab.1.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675266" />
+    <state width="1671" height="237" key="GridCell.Tab.1.center" timestamp="1584123675266">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.1.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545522" />
-    <state width="1874" height="283" key="GridCell.Tab.1.left" timestamp="1583954545522">
+    <state width="1671" height="237" key="GridCell.Tab.1.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675266" />
+    <state width="1671" height="237" key="GridCell.Tab.1.left" timestamp="1584123675265">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.1.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545522" />
-    <state width="1874" height="283" key="GridCell.Tab.1.right" timestamp="1583954545523">
+    <state width="1671" height="237" key="GridCell.Tab.1.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675265" />
+    <state width="1671" height="237" key="GridCell.Tab.1.right" timestamp="1584123675266">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="283" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954545523" />
-    <state width="960" height="540" key="XDebugger.FullValuePopup" timestamp="1583952823272">
+    <state width="1671" height="237" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675266" />
+    <state width="960" height="540" key="XDebugger.FullValuePopup" timestamp="1584036387914">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="960" height="540" key="XDebugger.FullValuePopup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583952823271" />
+    <state width="960" height="540" key="XDebugger.FullValuePopup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584036387914" />
     <state x="660" y="280" width="590" height="516" key="extract.method.dialog" timestamp="1583931679687">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="660" y="280" width="590" height="516" key="extract.method.dialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583931679687" />
-    <state x="568" y="252" width="784" height="576" key="find.popup" timestamp="1583954757553">
+    <state x="568" y="252" width="784" height="576" key="find.popup" timestamp="1584123566531">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="568" y="252" width="784" height="576" key="find.popup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583954757553" />
+    <state x="568" y="252" width="784" height="576" key="find.popup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123566531" />
     <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1583943958046">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -152,71 +156,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>114</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>117</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>110</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
           <line>54</line>
           <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>91</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>98</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>134</line>
-          <properties>
-            <option name="lambda-ordinal" value="1" />
-          </properties>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>236</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>235</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>260</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>269</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>167</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>176</line>
-          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
