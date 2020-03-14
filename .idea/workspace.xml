@@ -2,12 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb9d5af0-efcc-46c1-b8bf-fc1a02018594" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/jwt/JwtUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/service/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/encrypt/Encryptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/encrypt/EncryptionUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/env/EnvVarRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/env/EnvVarRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/http/HttpUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/http/HttpUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/jwt/JwtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/jwt/JwtUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/service/ServiceRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/domain/service/ServiceRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/javalin-gateway.kotlin_module" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/MainApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/MainApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/Service.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/encrypt/Encryptor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/env/EnvVarRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/env/EnvVarRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/http/HttpUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/http/HttpUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/jwt/JwtUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/jwt/JwtUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/service/ServiceRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/quicktutorialz/javalin/domain/service/ServiceRegistry.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +26,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -82,7 +91,8 @@
       <workItem from="1583827339329" duration="8524000" />
       <workItem from="1583913429389" duration="20243000" />
       <workItem from="1584035663361" duration="7649000" />
-      <workItem from="1584111538275" duration="7667000" />
+      <workItem from="1584111538275" duration="7804000" />
+      <workItem from="1584180994044" duration="12927000" />
     </task>
     <servers />
   </component>
@@ -102,50 +112,70 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="718" y="192" width="809" height="695" key="#xdebugger.evaluate/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584036383585" />
-    <state width="1671" height="237" key="GridCell.Tab.0.bottom" timestamp="1584123605858">
+    <state width="1671" height="276" key="GridCell.Tab.0.bottom" timestamp="1584200580292">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605858" />
-    <state width="1671" height="237" key="GridCell.Tab.0.center" timestamp="1584123605857">
+    <state width="1671" height="276" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584200580292" />
+    <state width="1671" height="237" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369328" />
+    <state width="1671" height="276" key="GridCell.Tab.0.center" timestamp="1584200580292">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605857" />
-    <state width="1671" height="237" key="GridCell.Tab.0.left" timestamp="1584123605857">
+    <state width="1671" height="276" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584200580292" />
+    <state width="1671" height="237" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369327" />
+    <state width="1671" height="276" key="GridCell.Tab.0.left" timestamp="1584200580292">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605857" />
-    <state width="1671" height="237" key="GridCell.Tab.0.right" timestamp="1584123605857">
+    <state width="1671" height="276" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584200580292" />
+    <state width="1671" height="237" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369327" />
+    <state width="1671" height="276" key="GridCell.Tab.0.right" timestamp="1584200580292">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123605857" />
-    <state width="1671" height="237" key="GridCell.Tab.1.bottom" timestamp="1584123675266">
+    <state width="1671" height="276" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584200580292" />
+    <state width="1671" height="237" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369328" />
+    <state width="1671" height="237" key="GridCell.Tab.1.bottom" timestamp="1584184612675">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.1.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675266" />
-    <state width="1671" height="237" key="GridCell.Tab.1.center" timestamp="1584123675266">
+    <state width="1671" height="237" key="GridCell.Tab.1.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584184612675" />
+    <state width="1671" height="237" key="GridCell.Tab.1.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369328" />
+    <state width="1671" height="237" key="GridCell.Tab.1.center" timestamp="1584184612675">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.1.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675266" />
-    <state width="1671" height="237" key="GridCell.Tab.1.left" timestamp="1584123675265">
+    <state width="1671" height="237" key="GridCell.Tab.1.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584184612675" />
+    <state width="1671" height="237" key="GridCell.Tab.1.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369328" />
+    <state width="1671" height="237" key="GridCell.Tab.1.left" timestamp="1584184612675">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.1.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675265" />
-    <state width="1671" height="237" key="GridCell.Tab.1.right" timestamp="1584123675266">
+    <state width="1671" height="237" key="GridCell.Tab.1.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584184612675" />
+    <state width="1671" height="237" key="GridCell.Tab.1.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369328" />
+    <state width="1671" height="237" key="GridCell.Tab.1.right" timestamp="1584184612675">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1671" height="237" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123675266" />
+    <state width="1671" height="237" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584184612675" />
+    <state width="1671" height="237" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1584124369328" />
     <state width="960" height="540" key="XDebugger.FullValuePopup" timestamp="1584036387914">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state width="960" height="540" key="XDebugger.FullValuePopup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584036387914" />
+    <state x="109" y="174" width="1517" height="744" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog" timestamp="1584196222902">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="109" y="174" width="1517" height="744" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584196222902" />
+    <state x="635" y="466" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1584194884660">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="635" y="466" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584194884660" />
     <state x="660" y="280" width="590" height="516" key="extract.method.dialog" timestamp="1583931679687">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="660" y="280" width="590" height="516" key="extract.method.dialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1583931679687" />
-    <state x="568" y="252" width="784" height="576" key="find.popup" timestamp="1584123566531">
+    <state x="568" y="252" width="784" height="576" key="find.popup" timestamp="1584199782651">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="568" y="252" width="784" height="576" key="find.popup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584123566531" />
+    <state x="568" y="252" width="784" height="576" key="find.popup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584199782651" />
+    <state x="563" y="174" width="598" height="739" key="refactoring.ChangeSignatureDialog" timestamp="1584189463106">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="563" y="174" width="598" height="739" key="refactoring.ChangeSignatureDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1584189463106" />
     <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1583943958046">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -156,7 +186,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/quicktutorialz/javalin/MainApplication.java</url>
-          <line>54</line>
+          <line>43</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
