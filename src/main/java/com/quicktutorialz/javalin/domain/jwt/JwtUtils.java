@@ -9,15 +9,18 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.quicktutorialz.javalin.domain.Constants.Envs.JWT_SECRET_KEY;
+import static com.quicktutorialz.javalin.domain.Constants.JWT_DATA;
+import static com.quicktutorialz.javalin.domain.Constants.JWT_ISSUER;
 import static com.quicktutorialz.javalin.domain.env.EnvVarRegistry.getEnv;
 
 public class JwtUtils {
 
     public static String generateJwt(String encryptedPayload) {
-        Algorithm algorithm = Algorithm.HMAC256( getEnv("JWT_SECRET_KEY") );
+        Algorithm algorithm = Algorithm.HMAC256( getEnv(JWT_SECRET_KEY) );
         return JWT.create()
-                .withIssuer("Javalin-Gateway")
-                .withClaim("data", encryptedPayload)
+                .withIssuer(JWT_ISSUER)
+                .withClaim(JWT_DATA, encryptedPayload)
                 .withExpiresAt(getExpirationDate())
                 .sign(algorithm);
     }
@@ -31,9 +34,9 @@ public class JwtUtils {
 
     public static String verifyJwt(String jwt) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256( getEnv("JWT_SECRET_KEY") );
+            Algorithm algorithm = Algorithm.HMAC256( getEnv(JWT_SECRET_KEY) );
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("Javalin-Gateway")
+                    .withIssuer(JWT_ISSUER)
                     .build();
             DecodedJWT decoded = verifier.verify(jwt);
             return decoded.getPayload();

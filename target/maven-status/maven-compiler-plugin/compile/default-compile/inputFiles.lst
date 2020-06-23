@@ -1,6 +1,7 @@
 /home/alessandro/work/alexapps/javalin-gateway/src/main/java/com/quicktutorialz/javalin/domain/auth/AuthResponse.java
 /home/alessandro/work/alexapps/javalin-gateway/src/main/java/com/quicktutorialz/javalin/domain/jwt/JwtUtils.java
 /home/alessandro/work/alexapps/javalin-gateway/src/main/java/com/quicktutorialz/javalin/domain/http/HttpMethod.java
+/home/alessandro/work/alexapps/javalin-gateway/src/main/java/com/quicktutorialz/javalin/domain/Constants.java
 /home/alessandro/work/alexapps/javalin-gateway/src/main/java/com/quicktutorialz/javalin/domain/service/Service.java
 /home/alessandro/work/alexapps/javalin-gateway/src/main/java/com/quicktutorialz/javalin/domain/env/EnvVarRegistry.java
 /home/alessandro/work/alexapps/javalin-gateway/src/main/java/com/quicktutorialz/javalin/domain/auth/AuthRequest.java

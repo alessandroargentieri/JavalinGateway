@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="rh-ga" />
+      <option name="name" value="Red Hat GA" />
+      <option name="url" value="https://maven.repository.redhat.com/ga" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sia-releases" />
+      <option name="name" value="Sia Releases" />
+      <option name="url" value="http://nexus.mitobit.com/nexus/content/repositories/sia-releases" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="releases" />
+      <option name="name" value="Mitobit Releases" />
+      <option name="url" value="http://nexus.mitobit.com/nexus/content/repositories/releases" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="banca5-exage" />
+      <option name="name" value="banca5-exage" />
+      <option name="url" value="http://nexus.mitobit.com/nexus/content/repositories/banca5-exage" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="thirdparty" />
+      <option name="name" value="Mitobit 3rd party" />
+      <option name="url" value="http://nexus.mitobit.com/nexus/content/repositories/thirdparty" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="snapshots" />
+      <option name="name" value="Mitobit Snapshots" />
+      <option name="url" value="http://nexus.mitobit.com/nexus/content/repositories/snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sia-snapshots" />
+      <option name="name" value="Sia Snapshots" />
+      <option name="url" value="http://nexus.mitobit.com/nexus/content/repositories/sia-snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="rh-ea" />
+      <option name="name" value="Red Hat EA" />
+      <option name="url" value="https://maven.repository.redhat.com/earlyaccess/all" />
+    </remote-repository>
+  </component>
+</project>

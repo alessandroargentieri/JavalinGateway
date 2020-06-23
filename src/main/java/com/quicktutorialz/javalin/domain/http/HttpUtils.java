@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+import static com.quicktutorialz.javalin.domain.Constants.*;
+
 public class HttpUtils {
 
     @NotNull
@@ -23,7 +25,7 @@ public class HttpUtils {
     public static Request composePostRequest(String url, Map<String, String> headers, String mediaType, byte[] content) {
         if (content==null){
             RequestBody reqbody = RequestBody.create(null, new byte[0]);
-            return new Request.Builder().url(url).method("POST",reqbody).header("Content-Length", "0").build();
+            return new Request.Builder().url(url).method(HttpMethod.POST.name(), reqbody).header(CONTENT_LENGTH, ZERO).build();
         }
         return new Request.Builder()
                 .url(url)
@@ -36,7 +38,7 @@ public class HttpUtils {
     public static Request composePutRequest(String url, Map<String, String> headers, String mediaType, byte[] content) {
         if (content==null){
             RequestBody reqbody = RequestBody.create(null, new byte[0]);
-            return new Request.Builder().url(url).method("POST",reqbody).header("Content-Length", "0").build();
+            return new Request.Builder().url(url).method(HttpMethod.PUT.name(), reqbody).header(CONTENT_LENGTH, ZERO).build();
         }
         return new Request.Builder()
                 .url(url)
@@ -58,7 +60,7 @@ public class HttpUtils {
     public static Request composePatchRequest(String url, Map<String, String> headers, String mediaType, byte[] content) {
         if (content==null){
             RequestBody reqbody = RequestBody.create(null, new byte[0]);
-            return new Request.Builder().url(url).method("POST",reqbody).header("Content-Length", "0").build();
+            return new Request.Builder().url(url).method(HttpMethod.PATCH.name(), reqbody).header(CONTENT_LENGTH, ZERO).build();
         }
         return new Request.Builder()
                 .url(url)

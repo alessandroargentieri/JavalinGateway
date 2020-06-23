@@ -1,5 +1,6 @@
 package com.quicktutorialz.javalin.domain.encrypt;
 
+import com.quicktutorialz.javalin.domain.Constants;
 import com.quicktutorialz.javalin.domain.auth.AuthResponse;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
@@ -9,7 +10,7 @@ public class EncryptionUtils {
 
     private static StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
     static {
-        encryptor.setPassword(getEnv("ENCRYPTION_PASSPHRASE"));
+        encryptor.setPassword(getEnv(Constants.Envs.ENCRYPTION_PASSPHRASE));
         encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
     }
 

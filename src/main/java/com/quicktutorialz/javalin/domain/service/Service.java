@@ -2,6 +2,7 @@ package com.quicktutorialz.javalin.domain.service;
 
 import java.io.Serializable;
 
+@Deprecated
 public class Service implements Serializable {
     String code;
     String hostUrl;
